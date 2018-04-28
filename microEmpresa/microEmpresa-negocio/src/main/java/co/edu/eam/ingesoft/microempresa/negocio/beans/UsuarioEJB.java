@@ -3,45 +3,39 @@
  */
 package co.edu.eam.ingesoft.microempresa.negocio.beans;
 
+import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import co.edu.ingesoft.microempresa.persistencia.conexion.AdminsitradorConexion;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Genero;
+import co.edu.eam.ingesoft.microempresa.negocio.persistencia.Persistencia;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Usuario;
 
 
 /**
- * @author TOSHIBAP55W
+ * @author Monica Sepulveda & Carlos Martinez & Kevin Zapata
  *
  */
 @LocalBean
 @Stateless
 public class UsuarioEJB {
-
+	@EJB
+	private Persistencia conexion;
 	
-//	@PersistenceContext(unitName = "postgress")
-//	private EntityManager em;
-//	
-	@PersistenceContext(unitName = "oracle")
-	private EntityManager emO;
-//	
-//	@PersistenceContext(unitName = "mysql")
-//	private EntityManager emMy;
-	
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Usuario buscarUsuario(String username) {
-		EntityManager em = AdminsitradorConexion.getEntityManager();
-		return em.find(Usuario.class, username);
-	}
-	
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Genero buscarGenero(int codigo) {
-		//EntityManager em = AdminsitradorConexion.getEntityManager();
-		return emO.find(Genero.class, codigo);
+	/**
+	 * Buscar un usuario por username
+	 * @param username el username del usuario a buscar
+	 * @param bd base de datos en la que buscara
+	 * @return el usuario en contrado, de lo contrario null
+	 */
+	public Usuario buscarByUsername(String username, int bd){
+		conexion.setBd(bd);
+		List<Object> lista = conexion.listarConParametroString(Usuario.buscarByUsername,username);
+		if(lista.size() > 0){
+			return (Usuario)lista.get(0);
+		}else{
+			return null;
+		}
 	}
 }

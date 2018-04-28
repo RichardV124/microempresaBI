@@ -22,8 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Empresas")
 @NamedQueries({
-	@NamedQuery(name=Empresa.listarTodas,query="SELECT e FROM Empresa e"),
-	
+	@NamedQuery(name=Empresa.listarTodas,query="SELECT e FROM Empresa e")		
 })
 public class Empresa implements Serializable{
 

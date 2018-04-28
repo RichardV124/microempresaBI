@@ -30,7 +30,7 @@ public class ListasEJB {
 	 * @param bd base de datos en la que obtendra los roles
 	 * @return lista de roles
 	 */
-	private List<Departamento> Departamentos(int bd){
+	public List<Departamento> listaDepartamentos(int bd){
 		conexion.setBd(bd);
 		// Lista de departamentos a retornar
 		List<Departamento> listado = new ArrayList<Departamento>();
@@ -49,7 +49,7 @@ public class ListasEJB {
 	 * @param bd base de datos en la que obtendra los municipios
 	 * @return lista de municipios
 	 */
-	private List<Municipio> Municipios(int bd){
+	public List<Municipio> listaMunicipios(int bd){
 		conexion.setBd(bd);
 		// Lista de municipios a retornar
 		List<Municipio> listado = new ArrayList<Municipio>();
@@ -68,12 +68,12 @@ public class ListasEJB {
 	 * @param bd base de datos en la que obtendra los generos
 	 * @return lista de generos
 	 */
-	private List<Genero> generos(int bd){
+	public List<Genero> listaGeneros(int bd){
 		conexion.setBd(bd);
 		// Lista de generos a retornar
 		List<Genero> listado = new ArrayList<Genero>();
 		// obtenemos la lista de objetos generos de la base de datos
-		List<Object> lista = conexion.listar(Genero.listar);
+		List<Object> lista = conexion.listar(Genero.listarGeneros);
 		// recorremos la lista de objetos genero
 		for (Object object : lista) {
 			// agregamos a la lista de generos, el objeto lo casteamos como objeto genero

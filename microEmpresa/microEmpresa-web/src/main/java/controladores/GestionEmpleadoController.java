@@ -7,10 +7,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 
 import org.omnifaces.cdi.ViewScoped;
 
+import co.edu.eam.ingesoft.microempresa.negocio.beans.AreaEmpresaEJB;
+import co.edu.eam.ingesoft.microempresa.negocio.beans.EmpresaEJB;
+import co.edu.eam.ingesoft.microempresa.negocio.beans.ListasEJB;
+import co.edu.eam.ingesoft.microempresa.negocio.beans.PersonaEJB;
 import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Genero;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Municipio;
@@ -24,6 +30,18 @@ import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 @Named("gestionEmpleadoController")
 public class GestionEmpleadoController implements Serializable{
 
+	@EJB
+	private PersonaEJB perEjb; 
+	
+	@EJB
+	private  AreaEmpresaEJB areaEmpresaEJB;
+	
+	@EJB
+	private ListasEJB listEjb;
+	
+	@EJB
+	private EmpresaEJB empEjb;
+	
 	private int codigo;
 	
 	private String cedulaBuscar;
@@ -65,10 +83,13 @@ public class GestionEmpleadoController implements Serializable{
 	
 	private String password;
 
-	
+	@PostConstruct
+	public void inicializar(){
+		listarTodo();
+	}
 	
 	public void registrar(){
-	
+
 	}
 	
 	public void buscarEmpleado(){
@@ -77,6 +98,13 @@ public class GestionEmpleadoController implements Serializable{
 	
 	public void editar(){
 		
+	}
+	
+	public void listarTodo(){
+		listaGeneros = listEjb.listaGeneros(1);
+		listaRoles = perEjb.listarRoles(1);
+		listaMunicipios = listEjb.listaMunicipios(1);
+		listaAreasEmpresa = areaEmpresaEJB.listarAreasEmpresa(1, 1); //parametro 1= bd , parametro 2= Codigo de la empresa
 	}
 
 	/**

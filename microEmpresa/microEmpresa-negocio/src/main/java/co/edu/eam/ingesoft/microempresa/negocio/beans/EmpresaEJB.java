@@ -8,12 +8,13 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import co.edu.eam.ingesoft.microempresa.negocio.persistencia.Persistencia;
+import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Empresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 
 /**
  * 
- * @author carlos
+ * @author carlos martinez
  * Se encarga de todas las operaciones a la tabla empresas
  */
 @LocalBean
@@ -81,4 +82,5 @@ public class EmpresaEJB {
 		}
 		return listado;
 	}
+	
 }

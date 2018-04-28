@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import co.edu.ingesoft.microempresa.persistencia.entidades.Persona;
 import excepciones.ExcepcionFuncional;
 
 
@@ -112,6 +112,36 @@ public class Persistencia  implements Serializable{
 	}
 	
 	/**
+	 * Metodo que permite buscar en alguna base de datos por un parametro de tipo Integer
+	 * @param parametro el parametro por ql cual se desea busacar
+	 * @return el objeto que se desea buscar
+	 */
+	public Object buscarXParametroInt (Class type,int parametro){
+		switch (this.bd) {
+		case 1:
+			Query q = emO.createNamedQuery(Persona.buscarXCedula);
+			q.setParameter(1, parametro);
+			List<Persona> persona = q.getResultList();
+			if(persona.isEmpty()){
+				return null;
+			}else{
+				return persona.get(0);
+			}
+		case 2:
+			Query p = emO.createNamedQuery(Persona.buscarXCedula);
+			p.setParameter(1, parametro);
+			List<Persona> personaB = p.getResultList();
+			if(personaB.isEmpty()){
+				return null;
+			}else{
+				return personaB.get(0);
+			}
+		default:
+			throw new excepciones.ExcepcionFuncional("La base de datos #"+this.bd+" no existe.");
+		}
+	}
+	
+	/**
 	 * Listar objetos
 	 * @param sql consulta a ejecutar, nos traera objetos de una determinada tabla
 	 * @return lista de los objetos encontrados
@@ -135,7 +165,7 @@ public class Persistencia  implements Serializable{
 	 * @parametro el parametro necesario para la consulta
 	 * @return lista de los objetos encontrados
 	 */
-	public List<Object> listarConParametro(String sql, int parametro){
+	public List<Object> listarConParametroInteger(String sql, int parametro){
 		switch (this.bd) {
 		case 1:
 			Query q = emO.createNamedQuery(sql);

@@ -3,6 +3,8 @@
  */
 package co.edu.ingesoft.microempresa.persistencia.entidades;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,8 +24,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Areas_Empresa")
-public class AreasEmpresa {
+@NamedQueries({
+	@NamedQuery(name=AreasEmpresa.listarXEmpresa,query="SELECT ae FROM AreasEmpresa ae where ae.empresa.codigo=?1"),
+	@NamedQuery(name=AreasEmpresa.buscarByNombre,query="SELECT ae FROM AreasEmpresa ae WHERE ae.nombre=?1")
+})
+public class AreasEmpresa implements Serializable{
 
+	public static final String listarXEmpresa = "areasEmpresa.listarXEmpresa";
+	public static final String buscarByNombre = "AreasEmpresa.buscarByNombre";
+	
 	@Id
 	@Column(name="codigo")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AREA_EMPRESA_SEQ")

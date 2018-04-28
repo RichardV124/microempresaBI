@@ -5,21 +5,20 @@ package controladores;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
-
+import javax.enterprise.context.SessionScoped;
 
 import co.edu.eam.ingesoft.microempresa.negocio.beans.UsuarioEJB;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Genero;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Usuario;
 
 /**
- * @author TOSHIBAP55W
+ * @author Carlos Martinez & Kevin Zapata & Monica Sepulveda
  *
  */
 @Named("usuarioController")
@@ -33,55 +32,53 @@ public class UsuarioController implements Serializable{
 	
 	private String password;
 	
-	private String dataBase;
+	private Usuario usuario;
 	
 
-	
+	/**
+	 * Iniciar sesion
+	 */
 	public void login() {
-//		usuarioEJB =  new UsuarioEJB(dataBase);
-		try{
-		if(username.isEmpty()){
-			Messages.addFlashGlobalError("ingrese informacion");
+		if(username.isEmpty() || password.isEmpty()){
+			Messages.addFlashGlobalError("Por favor, ingrese todos los campos");
 		}else{
-		
-		Genero u = usuarioEJB.buscarGenero(Integer.parseInt(username));
-		if (u== null){
-			Messages.addFlashGlobalError("Usuario INCORRECTO");
-			System.out.print("Usuario INCORRECTO");	
-		}else{
-			Messages.addFlashGlobalInfo("EL username es = "+u.getNombre()+" , y la contraseña es = "+u.getCodigo()+"");
-			//Messages.addFlashGlobalInfo("EL username es = "+u.getUsername()+" , y la contraseña es = "+u.getPassword()+"");
-		//	System.out.println("EL username es = "+u.getUsername()+" , y la contraseña es = "+u.getPassword()+"");
-		}
-//		System.out.println("EL username es = "+u.getUsername()+" , y la contraseña es = "+u.getPassword()+"");
-//		return "EL username es = "+u.getUsername()+" , y la contraseña es = "+u.getPassword()+"";	
-//	}
-		}
-		}catch (NumberFormatException ex){
-			Messages.addFlashGlobalError("solo datos numericos");
+			Usuario u = usuarioEJB.buscarByUsername(username, 1);
+			if(u != null){
+				if(u.getPassword().equals(password)){
+					usuario = u;
+					Faces.setSessionAttribute("usuario", usuario);
+					Messages.addFlashGlobalInfo("Ha iniciado sesion correctamente");
+				}else{
+					// Contraseña incorrecta
+					Messages.addFlashGlobalError("Username o contraseña incorrectos");
+				}
+			}else{
+				// Usuario no existe
+				Messages.addFlashGlobalError("Username o contraseña incorrectos");
+			}
 		}
 	}
-
-	
-	
-	/**
-	 * @return the dataBase
-	 */
-	public String getDataBase() {
-		return dataBase;
-	}
-
-
 
 	/**
-	 * @param dataBase the dataBase to set
+	 * Cierra la sesion en la aplicacion
+	 * @return la pagina de login
 	 */
-	public void setDataBase(String dataBase) {
-		this.dataBase = dataBase;
+	public String cerrarSesion() {
+		usuario = null;
+		HttpSession sesion;
+		sesion = (HttpSession) Faces.getSession();
+		sesion.invalidate();
+		return "/paginas/publico/login.xhtml?faces-redirect=true";
 	}
 
-
-
+	/**
+	 * Determina si existe la sesion del usuario
+	 * @return
+	 */
+	public boolean isSesion() {
+		return usuario != null;
+	}
+	
 	/**
 	 * @return the username
 	 */
@@ -109,6 +106,18 @@ public class UsuarioController implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
+
+	/**
+	 * @return the usuario
+	 */
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}	
 }

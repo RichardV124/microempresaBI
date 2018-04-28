@@ -64,7 +64,7 @@ public class RolEJB {
 	 * @param bd base de datos en la que buscara
 	 * @return
 	 */
-	private Rol buscar(int id, int bd){
+	public Rol buscar(int id, int bd){
 		conexion.setBd(bd);
 		return (Rol) conexion.buscar(Rol.class, id);
 	}
@@ -74,7 +74,7 @@ public class RolEJB {
 	 * @param bd base de datos en la que obtendra los roles
 	 * @return lista de roles
 	 */
-	private List<Rol> listar(int bd){
+	public List<Rol> listar(int bd){
 		conexion.setBd(bd);
 		// Lista de roles a retornar
 		List<Rol> listado = new ArrayList<Rol>();

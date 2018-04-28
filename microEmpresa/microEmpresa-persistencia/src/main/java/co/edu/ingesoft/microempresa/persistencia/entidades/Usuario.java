@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -21,8 +23,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Usuarios")
+@NamedQueries({
+	@NamedQuery(name=Usuario.buscarByUsername,query="SELECT u FROM Usuario u WHERE u.username=?1")
+})
 public class Usuario implements Serializable{
 
+	public static final String buscarByUsername = "Usuario.buscarByUsername";
+	
 	@Id
 	@Column(name="codigo")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQ")

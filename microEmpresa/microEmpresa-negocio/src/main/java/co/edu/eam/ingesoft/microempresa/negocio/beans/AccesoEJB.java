@@ -29,7 +29,7 @@ public class AccesoEJB {
 	 * @param bd base de datos en la que buscara
 	 * @return
 	 */
-	private Acceso buscar(int id, int bd){
+	public Acceso buscar(int id, int bd){
 		conexion.setBd(bd);
 		return (Acceso) conexion.buscar(Acceso.class, id);
 	}
@@ -39,7 +39,7 @@ public class AccesoEJB {
 	 * @param bd base de datos en la que obtendra los accesos
 	 * @return lista de accesos
 	 */
-	private List<Acceso> listar(int bd){
+	public List<Acceso> listar(int bd){
 		conexion.setBd(bd);
 		// Lista de accesos a retornar
 		List<Acceso> listado = new ArrayList<Acceso>();
@@ -53,23 +53,4 @@ public class AccesoEJB {
 		return listado;
 	}
 
-	
-	/**
-	 * Listar Accesos por Rol
-	 * @param bd base de datos en la que obtendra los accesos por rol
-	 * @return lista de accesos de un determinado rol
-	 */
-	private List<Acceso> listarByRol(int bd){
-		conexion.setBd(bd);
-		// Lista de roles a retornar
-		List<Acceso> listado = new ArrayList<Acceso>();
-		// obtenemos la lista de objetos rol de la base de datos
-		List<Object> lista = conexion.listar(Acceso.listarAccesosByRol);
-		// recorremos la lista de objetos rol
-		for (Object object : lista) {
-			// agregamos a la lista de roles, el objeto lo casteamos como objeto rol
-			listado.add((Acceso)object);
-		}
-		return listado;
-	}
 }

@@ -24,13 +24,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Accesos")
 @NamedQueries({
-	@NamedQuery(name=Acceso.listarAccesos,query="SELECT a FROM Acceso a"),
-	@NamedQuery(name=Acceso.listarAccesosByRol,query="SELECT a FROM Acceso a WHERE a.rol.codigo=?1")
+	@NamedQuery(name=Acceso.listarAccesos,query="SELECT a FROM Acceso a")
 })
 public class Acceso implements Serializable{
 
-	public static final String listarAccesos = "Rol.listarAccesos";
-	public static final String listarAccesosByRol = "Rol.listarAccesosByRol";
+	public static final String listarAccesos = "Acceso.listarAccesos";
 	
 	@Id
 	@Column(name="codigo")
@@ -43,10 +41,6 @@ public class Acceso implements Serializable{
 	
 	@Column(name="url",length=60,nullable=false)
 	private String url;
-	
-	@ManyToOne
-	@JoinColumn(name="rol")
-	private Rol rol;
 	
 	public Acceso (){
 		
@@ -92,20 +86,6 @@ public class Acceso implements Serializable{
 	 */
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	/**
-	 * @return the rol
-	 */
-	public Rol getRol() {
-		return rol;
-	}
-
-	/**
-	 * @param rol the rol to set
-	 */
-	public void setRol(Rol rol) {
-		this.rol = rol;
 	}
 	
 }

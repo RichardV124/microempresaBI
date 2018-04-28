@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,8 +26,16 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="Personas")
+@NamedQueries({
+	@NamedQuery(name=Persona.listarTodas,query="SELECT p FROM Persona p"),
+	@NamedQuery(name=Persona.buscarXCedula,query="SELECT p FROM Persona p where p.cedula=?1")
+})
 public class Persona implements  Serializable{
 
+	public static final String listarTodas = "Persona.listar";
+	
+	public static final String buscarXCedula = "Persona.buscarXCedula";
+	
 	@Id
 	@Column(name="codigo")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERSONA_SEQ")

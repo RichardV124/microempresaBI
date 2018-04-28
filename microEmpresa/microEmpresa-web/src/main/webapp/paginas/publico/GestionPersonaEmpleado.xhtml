@@ -55,7 +55,32 @@
 					
 					<p:outputLabel for="tfFechaNacimientoEmpl" id="fechaNacEmpl" value="Fecha nacimiento" />
 					<p:calendar id="tfFechaNacimientoEmpl" class="form-control"
-						value="#{gestionEmpleadoController.salario}" pattern="dd/MMM/yyyy" showOn="button"/>
+						value="#{gestionEmpleadoController.fechaNacimiento}" pattern="dd/MMM/yyyy" showOn="button"/>
+						
+					<p:outputLabel for="tfFechaIngresotoEmpl" id="fechaIngreEmpl" value="Fecha de ingreso" />
+					<p:calendar id="tfFechaIngresotoEmpl" class="form-control"
+						value="#{gestionEmpleadoController.fechaIngreso}" pattern="dd/MMM/yyyy" showOn="button"/>
+						
+					<p:outputLabel for="tfRolEmpl" id="rolEmpl" value="Rol" />
+					<h:selectOneMenu id="tfRolEmpl" class="form-control" value="#{gestionEmpleadoController.rolSeleccionado}">
+						<f:selectItem itemValue="0" itemLabel="Empleado" />
+						<f:selectItems  value="#{gestionEmpleadoController.listaRoles}"
+							var="rol" itemValue="#{rol.codigo}" itemLabel="#{rol.nombre}" itemDisabled="true"/>
+					</h:selectOneMenu>
+					
+					<p:outputLabel for="tfMunicipioEmpl" id="municpEmpl" value="Ciudad/Municipio" />
+					<h:selectOneMenu id="tfMunicipioEmpl" class="form-control" value="#{gestionEmpleadoController.municipioSeleccionado}">
+						<f:selectItem itemValue="0" itemLabel="Seleccione..." />
+						<f:selectItems  value="#{gestionEmpleadoController.listaMunicipios}"
+							var="mun" itemValue="#{mun.codigo}" itemLabel="#{mun.nombre}" />
+					</h:selectOneMenu>
+					
+					<p:outputLabel for="tfAreasEmpresaEmpl" id="areasEmpresaEmpl" value="Area de la empresa" />
+					<h:selectOneMenu id="tfAreasEmpresaEmpl" class="form-control" value="#{gestionEmpleadoController.areaSeleccionado}">
+						<f:selectItem itemValue="0" itemLabel="Seleccione..." />
+						<f:selectItems  value="#{gestionEmpleadoController.listaAreasEmpresa}"
+							var="ar" itemValue="#{ar.codigo}" itemLabel="#{ar.nombre}" />
+					</h:selectOneMenu>
 					
 				</h:panelGrid>
 				

@@ -22,11 +22,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Generos")
 @NamedQueries({
-	@NamedQuery(name=Genero.listar,query="SELECT g FROM Genero g")
+	@NamedQuery(name=Genero.listarGeneros,query="SELECT g FROM Genero g")
 })
 public class Genero implements Serializable{
 
-	public static final String listar = "Genero.listar";
+	public static final String listarGeneros = "Genero.listar";
 	
 	@Id
 	@Column(name="codigo")
