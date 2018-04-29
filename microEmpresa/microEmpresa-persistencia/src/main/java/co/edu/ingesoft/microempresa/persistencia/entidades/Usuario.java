@@ -24,11 +24,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Usuarios")
 @NamedQueries({
-	@NamedQuery(name=Usuario.buscarByUsername,query="SELECT u FROM Usuario u WHERE u.username=?1")
+	@NamedQuery(name=Usuario.buscarByUsername,query="SELECT u FROM Usuario u WHERE u.username=?1"),
+	@NamedQuery(name=Usuario.listar,query="SELECT u FROM Usuario u")
 })
 public class Usuario implements Serializable{
 
 	public static final String buscarByUsername = "Usuario.buscarByUsername";
+	public static final String listar = "Usuario.listar";
 	
 	@Id
 	@Column(name="codigo")

@@ -1,6 +1,5 @@
 package co.edu.eam.ingesoft.microempresa.negocio.beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -8,8 +7,8 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import co.edu.eam.ingesoft.microempresa.negocio.persistencia.Persistencia;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Empresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
+import excepciones.ExcepcionNegocio;
 
 /**
  * 
@@ -46,7 +45,12 @@ public class RolEJB {
 	 */
 	public void editar(Rol rol, int bd){
 		conexion.setBd(bd);
-		conexion.editar(rol);
+		Rol r = buscarByNombre(rol.getNombre(), bd);
+		if(r.getCodigo() == rol.getCodigo()){
+			conexion.editar(rol);
+		}else{
+			throw new ExcepcionNegocio("Ya existe un rol con el nombre "+rol.getNombre());
+		}
 	}
 	
 	/**
@@ -56,7 +60,12 @@ public class RolEJB {
 	 */
 	public void eliminar(Rol rol, int bd){
 		conexion.setBd(bd);
-		conexion.eliminar(rol);
+		Rol r = buscar(rol.getCodigo(), bd);
+		if(r != null){
+			conexion.eliminar(rol);
+		}else{
+			throw new ExcepcionNegocio("No existe un rol con el codigo "+rol.getCodigo());
+		}
 	}
 	
 	/**
@@ -77,16 +86,20 @@ public class RolEJB {
 	 */
 	public List<Rol> listar(int bd){
 		conexion.setBd(bd);
-		// Lista de roles a retornar
-		List<Rol> listado = new ArrayList<Rol>();
-		// obtenemos la lista de objetos rol de la base de datos
-		List<Object> lista = conexion.listar(Rol.listarRoles);
-		// recorremos la lista de objetos rol
-		for (Object object : lista) {
-			// agregamos a la lista de roles, el objeto lo casteamos como objeto rol
-			listado.add((Rol)object);
+		return (List<Rol>)(Object)conexion.listar(Rol.listarRoles);
+	}
+	
+	/**
+	 * Buscar rol por nombre
+	 */
+	public Rol buscarByNombre(String nombre, int bd){
+		conexion.setBd(bd);
+		List<Object> lista = conexion.listarConParametroString(Rol.buscarByNombre,nombre);
+		if(lista.size() > 0){
+			return (Rol)lista.get(0);
+		}else{
+			return null;
 		}
-		return listado;
 	}
 
 }

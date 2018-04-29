@@ -71,16 +71,7 @@ public class EmpresaEJB {
 	 */
 	public List<Empresa> listar(int bd){
 		conexion.setBd(bd);
-		// Lista de empresas a retornar
-		List<Empresa> listado = new ArrayList<Empresa>();
-		// obtenemos la lista de objetos empresa de la base de datos
-		List<Object> lista = conexion.listar(Empresa.listarTodas);
-		// recorremos la lista de objetos empresa
-		for (Object object : lista) {
-			// agregamos a la lista de empresas, el objeto lo casteamos como objeto empresa
-			listado.add((Empresa)object);
-		}
-		return listado;
+		return (List<Empresa>)(Object)conexion.listar(Empresa.listarTodas);
 	}
 	
 }

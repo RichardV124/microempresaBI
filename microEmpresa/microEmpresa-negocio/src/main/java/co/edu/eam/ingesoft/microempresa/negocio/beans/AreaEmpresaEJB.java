@@ -85,16 +85,7 @@ public class AreaEmpresaEJB {
 	 */
 	public List<AreasEmpresa> listarAreasEmpresa(int bd,int codigoEmpresa){
 		conexion.setBd(bd);
-		// Lista de AreasEmpresa a retornar
-		List<AreasEmpresa> listado = new ArrayList<AreasEmpresa>();
-		// obtenemos la lista de objetos AreasEmpresa de la base de datos
-		List<Object> lista = conexion.listarConParametroInteger(AreasEmpresa.listarXEmpresa,codigoEmpresa);
-		// recorremos la lista de objetos AreasEmpresa
-		for (Object object : lista) {
-			// agregamos a la lista de AreasEmpresa, el objeto lo casteamos como objeto AreasEmpresa
-			listado.add((AreasEmpresa)object);
-		}
-		return listado;
+		return (List<AreasEmpresa>)(Object)conexion.listarConParametroInteger(AreasEmpresa.listarXEmpresa,codigoEmpresa);
 	}
 	
 	/**

@@ -48,29 +48,11 @@ public class PersonaEJB {
 	
 	public List<Persona> listarPersonas(int bd){
 		conexion.setBd(bd);
-		// Lista de personas a retornar
-		List<Persona> listado = new ArrayList<Persona>();
-		// obtenemos la lista de objetos persona de la base de datos
-		List<Object> lista = conexion.listar(Persona.listarTodas);
-		// recorremos la lista de objetos persona
-		for (Object object : lista) {
-			// agregamos a la lista de personas, el objeto lo casteamos como objeto persona
-			listado.add((Persona)object);
-		}
-		return listado;
+		return (List<Persona>)(Object)conexion.listar(Persona.listarTodas);
 	}
 	
 	public List<Rol> listarRoles(int bd){
 		conexion.setBd(bd);
-		// Lista de roles a retornar
-		List<Rol> listado = new ArrayList<Rol>();
-		// obtenemos la lista de objetos rol de la base de datos
-		List<Object> lista = conexion.listar(Rol.listarRoles);
-		// recorremos la lista de objetos rol
-		for (Object object : lista) {
-			// agregamos a la lista de roles, el objeto lo casteamos como objeto rol
-			listado.add((Rol)object);
-		}
-		return listado;
+		return (List<Rol>)(Object)conexion.listar(Rol.listarRoles);
 	}
 }

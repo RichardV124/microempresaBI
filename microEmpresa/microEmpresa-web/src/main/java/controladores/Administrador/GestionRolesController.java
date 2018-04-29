@@ -21,28 +21,30 @@ import org.omnifaces.util.Messages;
 
 import co.edu.eam.ingesoft.microempresa.negocio.beans.AreaEmpresaEJB;
 import co.edu.eam.ingesoft.microempresa.negocio.beans.AuditoriaEJB;
+import co.edu.eam.ingesoft.microempresa.negocio.beans.RolEJB;
 import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Auditoria;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Empresa;
+import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 import excepciones.ExcepcionNegocio;
 import session.SessionController;
 
 
 /**
- * @author TOSHIBAP55W
+ * @author Carlos Martinez
  *
  */
 
 
 @ViewScoped
-@Named("GestionAreaEmpresaController")
-public class GestionAreaEmpresaController implements Serializable{
+@Named("GestionRolesController")
+public class GestionRolesController implements Serializable{
 	
 	@Inject
 	private SessionController sesion;
 
 	@EJB
-	private AreaEmpresaEJB areaEmpresaEJB;
+	private RolEJB rolEJB;
 	
 	@EJB
 	private AuditoriaEJB auditoriaEJB;
@@ -55,13 +57,13 @@ public class GestionAreaEmpresaController implements Serializable{
 	@Length(min=10,max=500,message="longitud entre 10 y 500 caracteres")
 	private String descripcion;
 
-	private List<AreasEmpresa> listaAreasEmpresa;
+	private List<Rol> roles;
 	
 	private List<Auditoria> auditorias;
 	
 	@PostConstruct
 	public void inicializar(){
-		listarAreasEmpresas();
+		listar();
 	}
 
 	/**
@@ -72,19 +74,15 @@ public class GestionAreaEmpresaController implements Serializable{
 			if(nombre.isEmpty()|| descripcion.isEmpty()){
 				Messages.addFlashGlobalWarn("Por favor ingrese toda la informacion");
 			}else{
-				AreasEmpresa areaEmpresa = new AreasEmpresa();
-				areaEmpresa.setNombre(nombre);
-				areaEmpresa.setDescripcion(descripcion);
-				Empresa empresa = new Empresa();
-				empresa.setCodigo(1);
-				//areaEmpresa.setEmpresa(sesion.getUsuario().getPersona().getAreaEmpresa().getEmpresa());
-				areaEmpresa.setEmpresa(empresa);
-				areaEmpresaEJB.crear(areaEmpresa, sesion.getBd());
-				Messages.addFlashGlobalInfo("El area "+nombre+" se ha registrado exitosamente!");
-				listarAreasEmpresas();
+				Rol rol = new Rol();
+				rol.setNombre(nombre);
+				rol.setDescripcion(descripcion);
+				rolEJB.crear(rol, sesion.getBd());
+				Messages.addFlashGlobalInfo("El rol "+nombre+" se ha registrado exitosamente!");
+				listar();
 				limpiar();
 				// Guardamos en la auditoria
-				auditoria(areaEmpresa.getNombre(), "Crear");
+				auditoria(rol.getNombre(), "Crear");
 			}
 		}catch (ExcepcionNegocio e){
 			Messages.addFlashGlobalWarn(e.getMessage());
@@ -99,23 +97,23 @@ public class GestionAreaEmpresaController implements Serializable{
 	public void editar(){
 		try{
 			if(codigo == 0){
-				Messages.addFlashGlobalWarn("Para editar por favor busque primero el Area de la empresa");
+				Messages.addFlashGlobalWarn("Para editar por favor busque primero el rol de la empresa");
 			}else{
-				AreasEmpresa areaEmpresa = areaEmpresaEJB.buscar(codigo, sesion.getBd());
-				if (areaEmpresa == null){
-					Messages.addFlashGlobalError("No existe ningun area con codigo "+codigo);
+				Rol rol = rolEJB.buscar(codigo, sesion.getBd());
+				if (rol == null){
+					Messages.addFlashGlobalError("No existe ningun rol con codigo "+codigo);
 				}else{
 					if(nombre.isEmpty() || descripcion.isEmpty()){
 						Messages.addFlashGlobalWarn("Por favor ingrese toda la informacion");
 					}else{
-						areaEmpresa.setNombre(nombre);
-						areaEmpresa.setDescripcion(descripcion);
-						areaEmpresaEJB.editar(areaEmpresa, sesion.getBd());
+						rol.setNombre(nombre);
+						rol.setDescripcion(descripcion);
+						rolEJB.editar(rol, sesion.getBd());
 						// Guardamos en la auditoria
-						auditoria(areaEmpresa.getNombre(), "Editar");
+						auditoria(rol.getNombre(), "Editar");
 						limpiar();
-						listarAreasEmpresas();
-						Messages.addFlashGlobalInfo("El area con codigo: "+codigo+" se ha actualizado exitosamente!");
+						listar();
+						Messages.addFlashGlobalInfo("El rol con codigo: "+codigo+" se ha actualizado exitosamente!");
 					}
 				}
 			}
@@ -137,22 +135,22 @@ public class GestionAreaEmpresaController implements Serializable{
 	public void buscar(){
 		try{
 			if(codigo == 0){
-				Messages.addFlashGlobalWarn("Por favor ingrese el codigo del Area de la empresa a buscar");
+				Messages.addFlashGlobalWarn("Por favor ingrese el codigo del rol de la empresa a buscar");
 			}else{
-				AreasEmpresa areaEmpresa = areaEmpresaEJB.buscar(codigo, sesion.getBd());
-				if(areaEmpresa != null){
-					nombre = areaEmpresa.getNombre();
-					descripcion = areaEmpresa.getDescripcion();
+				Rol rol = rolEJB.buscar(codigo, sesion.getBd());
+				if(rol != null){
+					nombre = rol.getNombre();
+					descripcion = rol.getDescripcion();
 					// Guardamos en la auditoria
-					auditoria(areaEmpresa.getNombre(), "Buscar");
+					auditoria(rol.getNombre(), "Buscar");
 				}else{
-					Messages.addFlashGlobalError("El area con codigo: "+codigo+" NO se encuentra registrada");
+					Messages.addFlashGlobalError("No existe ningun rol con codigo: "+codigo);
 				}
 			}
 		}catch (NumberFormatException ex){
 			Messages.addFlashGlobalWarn("Por favor ingrese solo datos numericos");
 		}catch (NullPointerException e) {
-			Messages.addFlashGlobalWarn("Por favor ingrese el codigo de la empresa");
+			Messages.addFlashGlobalWarn("Por favor ingrese el codigo del rol");
 		}
 	}
 
@@ -162,18 +160,18 @@ public class GestionAreaEmpresaController implements Serializable{
 	public void eliminar(){
 		try{
 			if(codigo == 0){
-				Messages.addFlashGlobalWarn("Por favor ingrese el codigo del Area de la empresa a eliminar");
+				Messages.addFlashGlobalWarn("Por favor ingrese el codigo del rol de la empresa a eliminar");
 			}else{
-				AreasEmpresa areaEmpresa = areaEmpresaEJB.buscar(codigo, sesion.getBd());
-				if(areaEmpresa != null){
-					areaEmpresaEJB.eliminar(areaEmpresa, sesion.getBd());
+				Rol rol = rolEJB.buscar(codigo, sesion.getBd());
+				if(rol != null){
+					rolEJB.eliminar(rol, sesion.getBd());
 					// Guardamos en la auditoria
-					auditoria(areaEmpresa.getNombre(), "Eliminar");
+					auditoria(rol.getNombre(), "Eliminar");
 					limpiar();
-					listarAreasEmpresas();
-					Messages.addFlashGlobalInfo("Se ha eliminado correctamente");
+					listar();
+					Messages.addFlashGlobalInfo("El rol "+rol.getNombre()+" Se ha eliminado correctamente");
 				}else{
-					Messages.addFlashGlobalInfo("No hay ningun area con codigo: "+codigo);
+					Messages.addFlashGlobalInfo("No hay ningun rol con codigo: "+codigo);
 				}
 			}
 		}catch(ExcepcionNegocio e){
@@ -186,9 +184,9 @@ public class GestionAreaEmpresaController implements Serializable{
 	/**
 	 * Lista con todas las areas de la empresa
 	 */
-	public void listarAreasEmpresas(){
-		listaAreasEmpresa = areaEmpresaEJB.listarAreasEmpresa(sesion.getBd(), 1);
-		auditorias = auditoriaEJB.listarByTabla("Areas_Empresa", sesion.getBd());
+	public void listar(){
+		roles = rolEJB.listar(sesion.getBd());
+		auditorias = auditoriaEJB.listarByTabla("Roles", sesion.getBd());
 	}
 	
 	/**
@@ -200,17 +198,17 @@ public class GestionAreaEmpresaController implements Serializable{
 	}
 	
 	/**
-	 * Proceso de registro de la auditoria de la tabla Areas Empresa	
+	 * Proceso de registro de la auditoria de la tabla roles
 	 */
 	public void auditoria(String nombre, String accion){
-		AreasEmpresa b = areaEmpresaEJB.buscarByNombre(nombre, sesion.getBd());
+		Rol r = rolEJB.buscarByNombre(nombre, sesion.getBd());
 		Date fecha = new Date();
 		String origen = "PC";
 		String navegador = "Mozilla";
 		Auditoria auditoria = new Auditoria();
-		auditoria.setTabla("Areas_Empresa");
+		auditoria.setTabla("Roles");
 		auditoria.setAccion(accion);
-		auditoria.setRegistro(b.getCodigo());
+		auditoria.setRegistro(r.getCodigo());
 		auditoria.setFecha(fecha);
 		auditoria.setOrigen(origen);
 		auditoria.setNavegador(navegador);
@@ -260,20 +258,6 @@ public class GestionAreaEmpresaController implements Serializable{
 	}
 
 	/**
-	 * @return the listaAreasEmpresa
-	 */
-	public List<AreasEmpresa> getListaAreasEmpresa() {
-		return listaAreasEmpresa;
-	}
-
-	/**
-	 * @param listaAreasEmpresa the listaAreasEmpresa to set
-	 */
-	public void setListaAreasEmpresa(List<AreasEmpresa> listaAreasEmpresa) {
-		this.listaAreasEmpresa = listaAreasEmpresa;
-	}
-
-	/**
 	 * @return the auditorias
 	 */
 	public List<Auditoria> getAuditorias() {
@@ -285,5 +269,19 @@ public class GestionAreaEmpresaController implements Serializable{
 	 */
 	public void setAuditorias(List<Auditoria> auditorias) {
 		this.auditorias = auditorias;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public List<Rol> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
 	}
 }

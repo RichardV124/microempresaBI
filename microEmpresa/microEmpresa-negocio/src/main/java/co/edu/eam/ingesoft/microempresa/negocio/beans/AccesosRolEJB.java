@@ -119,12 +119,7 @@ public class AccesosRolEJB {
 	 */
 	public List<RolAcceso> listarAccesosRolByRol(Rol rol, int bd){
 		conexion.setBd(bd);
-		List<RolAcceso> listado = new ArrayList<RolAcceso>();
-		List<Object> lista = conexion.listarConParametroInteger(RolAcceso.listarAccesosByRol, rol.getCodigo());
-		for (Object object : lista) {
-			listado.add((RolAcceso)object);
-		}
-		return listado;
+		return (List<RolAcceso>)(Object)conexion.listarConParametroInteger(RolAcceso.listarAccesosByRol, rol.getCodigo());
 	}
 	
 }

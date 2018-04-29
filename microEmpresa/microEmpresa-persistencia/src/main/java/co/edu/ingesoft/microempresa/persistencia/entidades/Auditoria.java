@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,7 +24,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="Auditoria")
+@NamedQueries({
+	@NamedQuery(name=Auditoria.ByTabla,query="SELECT a FROM Auditoria a WHERE a.tabla=?1")
+})
 public class Auditoria implements Serializable{
+	
+	public static final String ByTabla = "Auditoria.ByTabla";
+	
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AUDITORIA_SEQ")
@@ -38,10 +46,10 @@ public class Auditoria implements Serializable{
 	@Column(name="registro",nullable=false)
 	private int registro;
 	
-	@Column(name="origen",length=100,nullable=false)
+	@Column(name="origen",length=200,nullable=false)
 	private String origen;
 	
-	@Column(name="navegador",length=100,nullable=false)
+	@Column(name="navegador",length=200,nullable=false)
 	private String navegador;
 		
 	@Temporal(TemporalType.TIMESTAMP)

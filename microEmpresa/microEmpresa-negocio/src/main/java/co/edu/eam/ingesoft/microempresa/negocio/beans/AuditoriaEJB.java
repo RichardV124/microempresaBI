@@ -43,14 +43,9 @@ public class AuditoriaEJB {
 	/**
 	 * Listar la Auditoria de una determinada Tabla
 	 */
-	public List<Auditoria> listarByTabla(String sql, String tabla, int bd){
+	public List<Auditoria> listarByTabla(String tabla, int bd){
 		conexion.setBd(bd);
-		List<Auditoria> listado = new ArrayList<Auditoria>();
-		List<Object> lista = conexion.listarConParametroString(sql, tabla);
-		for (Object object : lista) {
-			listado.add((Auditoria)object);
-		}
-		return listado;
+		return (List<Auditoria>)(Object)conexion.listarConParametroString(Auditoria.ByTabla, tabla);
 	}
 	
 }
