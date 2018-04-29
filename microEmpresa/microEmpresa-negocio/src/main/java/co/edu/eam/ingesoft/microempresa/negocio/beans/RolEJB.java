@@ -22,6 +22,7 @@ public class RolEJB {
 	
 	@EJB
 	private Persistencia conexion;
+	
 	/**
 	 * Registrar rol en la base de datos
 	 * @param rol el rol a registrar

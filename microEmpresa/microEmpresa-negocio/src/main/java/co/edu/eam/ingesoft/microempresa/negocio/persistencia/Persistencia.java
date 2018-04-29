@@ -100,7 +100,7 @@ public class Persistencia  implements Serializable{
 	 * @param pk el identificador del registro a buscar
 	 * @return retorna el registro encontrado, de lo contrario null
 	 */
-	public Object buscar(Class type, int pk){
+	public Object buscar(Class type, Object pk){
 		switch (this.bd) {
 		case 1:
 			return emO.find(type, pk);

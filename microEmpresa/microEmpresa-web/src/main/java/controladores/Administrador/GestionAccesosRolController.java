@@ -4,28 +4,19 @@
 package controladores.Administrador;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
-import org.hibernate.validator.constraints.Length;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Messages;
 
 import co.edu.eam.ingesoft.microempresa.negocio.beans.AccesoEJB;
-import co.edu.eam.ingesoft.microempresa.negocio.beans.AreaEmpresaEJB;
-import co.edu.eam.ingesoft.microempresa.negocio.beans.AuditoriaEJB;
+import co.edu.eam.ingesoft.microempresa.negocio.beans.AccesosRolEJB;
 import co.edu.eam.ingesoft.microempresa.negocio.beans.RolEJB;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Acceso;
-import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Auditoria;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Empresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 import co.edu.ingesoft.microempresa.persistencia.entidades.RolAcceso;
 import excepciones.ExcepcionNegocio;
@@ -44,6 +35,9 @@ public class GestionAccesosRolController implements Serializable{
 	
 	@Inject
 	private SessionController sesion;
+	
+	@EJB
+	private AccesosRolEJB accesosRolEJB;
 
 	@EJB
 	private RolEJB rolEJB;
@@ -70,14 +64,45 @@ public class GestionAccesosRolController implements Serializable{
 	 * Otorga el acceso a un rol
 	 */
 	public void otorgar(){
-		
+		try{
+			if(rol != null && acceso != null){
+				RolAcceso rolAcceso = new RolAcceso(rol, acceso);
+				accesosRolEJB.crear(rolAcceso, sesion.getBd());
+				Messages.addFlashGlobalInfo("Se ha asignado el acceso "+acceso.getNombreAcceso()+" a el rol "+rol.getNombre());
+				accesosByRol();
+			}else{
+				Messages.addFlashGlobalInfo("Seleccione el rol y el acceso");
+			}
+		}catch (ExcepcionNegocio e){
+			Messages.addFlashGlobalWarn(e.getMessage());
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+			
 	}
 	
 	/**
 	 * Quita el permiso a un rol
 	 */
 	public void quitar(RolAcceso rolAcceso){
-		
+		try{
+			accesosRolEJB.eliminar(rolAcceso, sesion.getBd());
+			Messages.addFlashGlobalInfo("Se ha eliminado el acceso del rol correctamente");
+			accesosByRol();
+		}catch (ExcepcionNegocio e){
+			Messages.addFlashGlobalWarn(e.getMessage());
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Lista de accesosRol de un determinado rol
+	 */
+	public void accesosByRol(){
+		if(rol != null){
+			rolAccesos = accesosRolEJB.listarAccesosRolByRol(rol, sesion.getBd());
+		}
 	}
 	
 	/**
@@ -86,6 +111,7 @@ public class GestionAccesosRolController implements Serializable{
 	public void listar(){
 		roles = rolEJB.listar(sesion.getBd());
 		accesos = accesoEJB.listar(sesion.getBd());
+		rolAccesos = accesosRolEJB.listarAccesosRolByRol(roles.get(0), sesion.getBd());
 	}
 
 	/**

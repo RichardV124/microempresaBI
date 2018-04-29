@@ -22,7 +22,6 @@ import co.edu.ingesoft.microempresa.persistencia.entidades.Usuario;
 @Named("sessionController")
 @SessionScoped
 public class SessionController implements Serializable {
-	
 
 	@EJB
 	private UsuarioEJB usuarioEJB;

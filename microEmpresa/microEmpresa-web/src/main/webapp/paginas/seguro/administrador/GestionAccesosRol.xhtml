@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui" template="/template/template.xhtml">
 
 	<ui:define name="cuerpo">
-		<h:form prependId="false">
+		<h:form prependId="false" id="gestion">
 		
 		<p:tabView id="tablaDatosEmpresa" style="margin-top:100px">
 					<p:tab title="Gestion de los Accesos de los roles" dynamic="true" cache="true">
@@ -17,6 +17,7 @@
 				<h:outputLabel for="rol" id="lrol" value="Rol:" />
 				<h:selectOneMenu id="rol" value="#{GestionAccesosRolController.rol}" converter="#{rolConverter}">
 					<f:selectItems value="#{GestionAccesosRolController.roles}" var="rol" itemValue="#{rol}" itemLabel="#{rol.nombre}"/>
+					<f:ajax event="change" execute="@this" render="panelTablaEmp" listener="#{GestionAccesosRolController.accesosByRol()}"/>
 				</h:selectOneMenu>
 				<p:message for="rol"/>
 
@@ -28,15 +29,14 @@
 					
 				</h:panelGrid>
 				
-				<p:commandButton styleClass="ui-priority-primary" value="Otorgar permiso" update=":tablaDatosEmpresa:panelTablaEmp:tablaEmp
-				:tablaDatosEmpresa:dtEmp" action="#{GestionAccesosRolController.otorgar()}" style="margin-top:15px"/>
+				<p:commandButton styleClass="ui-priority-primary" value="Otorgar permiso"  action="#{GestionAccesosRolController.otorgar()}" style="margin-top:15px" update="panelTablaEmp" process="@this,gestion"/>
 
 
 			</p:fieldset>
 			
 			<p:accordionPanel id="panelTablaEmp"  style="margin-top:15px">
 				<p:tab title="Accesos del rol">
-					<p:dataTable value="#{GestionAccesosRolController.rolAccesos}" id="tablaEmp"
+					<p:dataTable value="#{GestionAccesosRolController.rolAccesos}" id="tabla"
 						var="a" border="1">
 						
 						<p:column>
@@ -64,7 +64,7 @@
 							<f:facet name="header">
 							Quitar acceso
 						</f:facet>
-							<p:commandButton action="#{GestionAccesosRolController.quitar(a)}" value="eliminar" update="panelTablaEmp" process="@this" id="btnbuscar"/>
+							<p:commandButton action="#{GestionAccesosRolController.quitar(a)}" value="eliminar" update="gestion" process="@this" id="btnbuscar"/>
 						</p:column>
 												
 					</p:dataTable>
