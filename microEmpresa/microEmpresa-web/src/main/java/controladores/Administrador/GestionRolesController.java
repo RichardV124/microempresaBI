@@ -4,27 +4,21 @@
 package controladores.Administrador;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.validator.constraints.Length;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Messages;
 
-import co.edu.eam.ingesoft.microempresa.negocio.beans.AreaEmpresaEJB;
 import co.edu.eam.ingesoft.microempresa.negocio.beans.AuditoriaEJB;
 import co.edu.eam.ingesoft.microempresa.negocio.beans.RolEJB;
-import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Auditoria;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Empresa;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 import excepciones.ExcepcionNegocio;
 import session.SessionController;

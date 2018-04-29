@@ -1,6 +1,5 @@
 package co.edu.eam.ingesoft.microempresa.negocio.beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,7 +10,6 @@ import co.edu.eam.ingesoft.microempresa.negocio.persistencia.Persistencia;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Departamento;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Genero;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Municipio;
-import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 
 /**
  * 
@@ -37,6 +35,14 @@ public class ListasEJB {
 	}
 	
 	/**
+	 * Buscar departamento
+	 */
+	public Departamento buscarDepartamento(int id, int bd){
+		conexion.setBd(bd);
+		return (Departamento) conexion.buscar(Departamento.class, id);
+	}
+	
+	/**
 	 * Listar Municipios
 	 * @param bd base de datos en la que obtendra los municipios
 	 * @return lista de municipios
@@ -47,6 +53,23 @@ public class ListasEJB {
 	}
 	
 	/**
+	 * Buscar municipio
+	 */
+	public Municipio buscarMunicipio(int id, int bd){
+		conexion.setBd(bd);
+		return (Municipio) conexion.buscar(Municipio.class, id);
+	}
+	
+	/**
+	 * Listar Municipios de un Departamento
+	 */
+	public List<Municipio> listaMunicipiosByDepartamento(Departamento departamento, int bd){
+		conexion.setBd(bd);
+		return (List<Municipio>)(Object)conexion.listarConParametroInteger(Municipio.listarByDepartamento, departamento.getCodigo());
+	}
+	
+	
+	/**
 	 * Listar Generos
 	 * @param bd base de datos en la que obtendra los generos
 	 * @return lista de generos
@@ -54,5 +77,13 @@ public class ListasEJB {
 	public List<Genero> listaGeneros(int bd){
 		conexion.setBd(bd);
 		return (List<Genero>)(Object)conexion.listar(Genero.listarGeneros);
+	}
+	
+	/**
+	 * Buscar genero
+	 */
+	public Genero buscarGenero(int id, int bd){
+		conexion.setBd(bd);
+		return (Genero) conexion.buscar(Genero.class, id);
 	}
 }

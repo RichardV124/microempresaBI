@@ -62,7 +62,7 @@ public class Persona implements  Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date fechaNacimiento;
 	
-	@Column(name="fecha_ingreso")
+	@Column(name="fecha_ingreso",nullable=true)
 	@Temporal(TemporalType.DATE)
 	private Date fechaIngreso;
 	
@@ -239,6 +239,19 @@ public class Persona implements  Serializable{
 	public void setAreaEmpresa(AreasEmpresa areaEmpresa) {
 		this.areaEmpresa = areaEmpresa;
 	}
-	
+
+	/**
+	 * @return the telefono
+	 */
+	public String getTelefono() {
+		return telefono;
+	}
+
+	/**
+	 * @param telefono the telefono to set
+	 */
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
 	
 }

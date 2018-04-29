@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 
 import co.edu.eam.ingesoft.microempresa.negocio.persistencia.Persistencia;
 import co.edu.ingesoft.microempresa.persistencia.entidades.AreasEmpresa;
+import co.edu.ingesoft.microempresa.persistencia.entidades.Rol;
 import co.edu.ingesoft.microempresa.persistencia.entidades.Usuario;
 import excepciones.ExcepcionNegocio;
 
@@ -24,6 +25,18 @@ import excepciones.ExcepcionNegocio;
 public class UsuarioEJB {
 	@EJB
 	private Persistencia conexion;
+	
+	/**
+	 * Crear
+	 */
+	public void crear(Usuario u, int bd){
+		conexion.setBd(bd);
+		if(buscarByUsername(u.getUsername(), bd) == null){
+			conexion.crear(u);
+		}else{
+			throw new excepciones.ExcepcionNegocio("Ya existe un usuario con el username: "+u.getUsername());
+		}
+	}
 	
 	/**
 	 * Editar 
